@@ -1,0 +1,44 @@
+*{
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(233, 232, 232);
+    margin: 0;
+    padding: 0;
+    color: black;
+    line-height: 1.5;
+    font-size: 16px;
+}
+
+main {
+    margin: 20px auto;
+    width: 94%;
+}
+
+.btn {
+    background-color: blue;
+    color: #fff;
+    border-radius: .3rem;
+    border: none;
+    outline: none;
+    box-shadow: 3px 3px blue;
+}
+
+.btn:hover {
+    background-color: rgb(68, 68, 236);
+    box-shadow: 2px 2px #040d83;
+}
+
+.hero {
+    padding: 3% 4%;
+    background-color: rgb(68, 68, 236);
+    color: #fff;
+}
+
+.app-title {
+    font-size: 3rem;
+    background-color:rgb(68, 68, 236);
+    padding: 0 10px;
+    display: inline-block;
+}
