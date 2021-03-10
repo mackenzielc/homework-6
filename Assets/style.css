@@ -42,3 +42,33 @@ main {
     padding: 0 10px;
     display: inline-block;
 }
+
+ul {
+    list-style-type: none;
+    margin-left: 3px;
+    line-height: 2;
+}
+
+li:first-letter {
+    text-transform: capitalize;
+}
+
+.green-uv {
+    background-color: green;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.warning-uv {
+    background-color: yellow;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.danger-uv {
+    background-color: red;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}
