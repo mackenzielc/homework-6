@@ -81,7 +81,6 @@ searchEl.addEventListener('submit', function(event){
 });
 
 function printCurrentWeather(resultObj) {
-    console.log(resultObj.name)
     var resultCard = document.createElement('div');
     resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
 
@@ -90,21 +89,60 @@ function printCurrentWeather(resultObj) {
     resultCard.append(resultBody);
 
     var titleEl = document.createElement('h3');
-    titleEl.textContent=resultObj.name
+    titleEl.textContent=searchedCity.value;
 
     var iconEl = document.createElement('img');
-    iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + resultObj.weather[0].icon + ".png")
+    iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + resultObj.current.weather[0].icon + ".png")
 
     var bodyContentEl = document.createElement('p');
-    bodyContentEl.innerHTML = '<strong>Temperature:</strong> ' + resultObj.main.temp + ' °C' + '<br/>';
-    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + resultObj.main.humidity + "%"+ '<br/>';
-    bodyContentEl.innerHTML += '<strong>Wind:</strong> ' + resultObj.wind.speed + " MPH"+ '<br/>';
+    bodyContentEl.innerHTML = '<strong>Temperature:</strong> ' + resultObj.current.temp + ' °C' + '<br/>';
+    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + resultObj.current.humidity + "%"+ '<br/>';
+    bodyContentEl.innerHTML += '<strong>Wind:</strong> ' + resultObj.current.wind_speed + " MPH"+ '<br/>';
     
-    
+    var uvText = document.createElement('p');
+    var uvEl = document.createElement('span');
+    var uvIndex = uvEl.textContent = resultObj.current.uvi
+    uvText.innerHTML = "<strong>UV index:</strong> "
+    uvText.append(uvEl)
+    bodyContentEl.append(uvText)
+
+    if (uvIndex < 3) {
+        uvEl.classList.add('green-uv')
+    } else if (uvIndex >= 3 && uvIndex < 8) {
+        uvEl.classList.add('warning-uv')
+    } else {
+        uvEl.classList.add('danger-uv')
+    }
 
     resultBody.append(titleEl, iconEl, bodyContentEl);
 
     currentWeatherEl.append(resultCard);
+}
+
+function printForecastWeather(resultObj) {
+    var resultCard = document.createElement('div');
+    resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+
+    var resultBody = document.createElement('div');
+    resultBody.classList.add('card-body');
+    resultCard.append(resultBody)
+
+    var titleEl = document.createElement('h4');
+    var day = moment.unix(resultObj.daily[1].dt);
+    titleEl.textContent = day.format("M/D/YYYY")
+
+    var iconEl = document.createElement('img');
+    iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + resultObj.daily[1].weather[0].icon + ".png")
+
+    var bodyContentEl = document.createElement('p');
+    bodyContentEl.innerHTML = '<strong>Temperature:</strong> ' + resultObj.daily[1].temp.day + ' °C' + '<br/>';
+    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + resultObj.daily[1].humidity + "%"+ '<br/>';
+
+    resultBody.append(titleEl, iconEl, bodyContentEl);
+
+    forecastWeatherEl.append(resultCard)
+
+    console.log(resultObj.daily.length)
 }
 
 function getAPI(cityID) {
@@ -113,37 +151,26 @@ function getAPI(cityID) {
     .then(function(response){return response.json()}) //convert data to json
     .then(function(data) {
         console.log(data)
-        currentWeatherEl.textContent = '';
-        printCurrentWeather(data)
-        getUVAPI(data.coord.lat, data.coord.lon)
+        getWeatherAPI(data.coord.lat, data.coord.lon)
     })
 
     .catch(function(){}) //catch any errors
 }
 
-function getUVAPI(lat, lon) {
+function getWeatherAPI(lat, lon) {
     var key = 'dd6c6dc7ead19d604aeaf2d9ada1f731';
-    fetch('http://api.openweathermap.org/data/2.5/uvi?lat='+ lat + '&lon=' + lon + '&appid=' + key)
+    fetch('http://api.openweathermap.org/data/2.5/onecall?lat='+ lat + '&lon=' + lon + '&units=metric&exclude=minutely,hourly,alerts&appid=' + key)
     .then(function(response){return response.json()})
     .then(function(data){
         console.log(data)
-        var uvText = document.createElement('p')
-        var uvEl = document.createElement('span');
-        uvIndex = uvEl.textContent = data.value
-        uvText.innerHTML = "<strong>UV index:</strong> "
-        uvText.append(uvEl)
-        currentWeatherEl.append(uvText)
-
-        if (uvIndex < 3) {
-            uvEl.classList.add('green-uv')
-        } else if (uvIndex >= 3 && uvIndex < 8) {
-            uvEl.classList.add('warning-uv')
-        } else {
-            uvEl.classList.add('danger-uv')
-        }
+        currentWeatherEl.textContent = '';
+        printCurrentWeather(data)
+        printForecastWeather(data)
     })
 
+    .catch(function(){}) //catch any errors
 }
+
 
 
 //Call init to retrieve data and render it to the page on load
@@ -155,5 +182,8 @@ init();
 //Things to do
 //1) Add the list so it is in reverse order
 //2) Change the hover over pointer to just the text, not the entire link element
-//3) figure out how to put the UV API into the card element 
+//3) Add the city to the title element (2 steps - (1) if you click on a li element, update the title to the inner HTML of that li and if you search an elemenet, make the title the 0th array element)
 //4) run the 5-day forecast API (use the moment library?)
+
+
+
