@@ -53,6 +53,10 @@ li:first-letter {
     text-transform: capitalize;
 }
 
+.custom-li:hover {
+    cursor:pointer;
+}
+
 .green-uv {
     background-color: green;
     color: #fff;
