@@ -12,7 +12,7 @@
     <!-- CSS style sheet -->
     <link rel="stylesheet" href="./Assets/style.css">
 </head>
-<body class="flex-column min-100-vh">
+<body>
     <header class="hero text-center">
         <h1 class="app-title">Weather Dashboard</h1>
     </header>
@@ -41,21 +41,16 @@
         </div>
 
         <!-- Column that will contain current weather for current search -->
-        <div class="col-md-9 pt-3 pb-3">
+        <div class="col-md-9">
             <div id="current" class="card"></div>
         </div>
 
     </div>
 
     <!-- Container that will contain 5-day forecast -->
-    <div class="row p-3">
-        <div class="col-12">
-            <div class="card" id="forecast">
-                
-            </div>
-        </div>
+    <div class="row d-flex justify-content-around" id="forecast">
+        
     </div>
-
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>

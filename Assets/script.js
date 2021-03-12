@@ -32,7 +32,6 @@ function renderCityHistory() {
         if(element.matches('li') === true) {
             console.log(element.innerHTML)
             var historyCity = element.innerHTML
-            //How do I run the historyCity variable through the weather API?
             getAPI(historyCity)
         }
     })
@@ -57,6 +56,7 @@ function storeCities() {
 }
 
 searchEl.addEventListener('submit', function(event){
+    console.log(event)
     event.preventDefault();
     var city = searchedCity.value;
 
@@ -80,16 +80,19 @@ searchEl.addEventListener('submit', function(event){
 
 });
 
-function printCurrentWeather(resultObj) {
+function printCurrentWeather(name, resultObj) {
     var resultCard = document.createElement('div');
-    resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+    resultCard.classList.add('card', 'bg-light', 'text-dark', 'm-3', 'p-3');
 
     var resultBody = document.createElement('div');
     resultBody.classList.add('card-body');
     resultCard.append(resultBody);
 
     var titleEl = document.createElement('h3');
-    titleEl.textContent=searchedCity.value;
+    var day = moment.unix(resultObj.daily[0].dt);
+    titleEl.textContent = name + ' (' + day.format("M/D/YYYY") + ')'
+    
+    console.log(name);
 
     var iconEl = document.createElement('img');
     iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + resultObj.current.weather[0].icon + ".png")
@@ -120,29 +123,35 @@ function printCurrentWeather(resultObj) {
 }
 
 function printForecastWeather(resultObj) {
-    var resultCard = document.createElement('div');
-    resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+    
+    for (var i = 1; i < 6; i++) {
+        var resultCol = document.createElement('div');
+        resultCol.classList.add('col-lg-2');
 
-    var resultBody = document.createElement('div');
-    resultBody.classList.add('card-body');
-    resultCard.append(resultBody)
+        var resultCard = document.createElement('div');
+        resultCard.classList.add('card', 'bg-light', 'text-dark', 'm-3', 'p-3');
+        resultCol.append(resultCard)
 
-    var titleEl = document.createElement('h4');
-    var day = moment.unix(resultObj.daily[1].dt);
-    titleEl.textContent = day.format("M/D/YYYY")
+        var resultBody = document.createElement('div');
+        resultBody.classList.add('card-body');
+        resultCard.append(resultBody)
 
-    var iconEl = document.createElement('img');
-    iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + resultObj.daily[1].weather[0].icon + ".png")
+        var titleEl = document.createElement('h4');
+        var day = moment.unix(resultObj.daily[i].dt);
+        titleEl.textContent = day.format("M/D/YYYY")
 
-    var bodyContentEl = document.createElement('p');
-    bodyContentEl.innerHTML = '<strong>Temperature:</strong> ' + resultObj.daily[1].temp.day + ' °C' + '<br/>';
-    bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + resultObj.daily[1].humidity + "%"+ '<br/>';
+        var iconEl = document.createElement('img');
+        iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + resultObj.daily[i].weather[0].icon + ".png")
 
-    resultBody.append(titleEl, iconEl, bodyContentEl);
+        var bodyContentEl = document.createElement('p');
+        bodyContentEl.innerHTML = '<strong>Temperature:</strong> ' + resultObj.daily[i].temp.day + ' °C' + '<br/>';
+        bodyContentEl.innerHTML += '<strong>Humidity:</strong> ' + resultObj.daily[i].humidity + "%"+ '<br/>';
 
-    forecastWeatherEl.append(resultCard)
+        resultBody.append(titleEl, iconEl, bodyContentEl);
 
-    console.log(resultObj.daily.length)
+        forecastWeatherEl.append(resultCol)
+
+    }
 }
 
 function getAPI(cityID) {
@@ -151,26 +160,26 @@ function getAPI(cityID) {
     .then(function(response){return response.json()}) //convert data to json
     .then(function(data) {
         console.log(data)
-        getWeatherAPI(data.coord.lat, data.coord.lon)
+        getWeatherAPI(data.name ,data.coord.lat, data.coord.lon)
     })
 
     .catch(function(){}) //catch any errors
 }
 
-function getWeatherAPI(lat, lon) {
+function getWeatherAPI(name, lat, lon) {
     var key = 'dd6c6dc7ead19d604aeaf2d9ada1f731';
     fetch('http://api.openweathermap.org/data/2.5/onecall?lat='+ lat + '&lon=' + lon + '&units=metric&exclude=minutely,hourly,alerts&appid=' + key)
     .then(function(response){return response.json()})
     .then(function(data){
         console.log(data)
         currentWeatherEl.textContent = '';
-        printCurrentWeather(data)
+        forecastWeatherEl.textContent = '';
+        printCurrentWeather(name, data)
         printForecastWeather(data)
     })
 
     .catch(function(){}) //catch any errors
 }
-
 
 
 //Call init to retrieve data and render it to the page on load
@@ -183,7 +192,5 @@ init();
 //1) Add the list so it is in reverse order
 //2) Change the hover over pointer to just the text, not the entire link element
 //3) Add the city to the title element (2 steps - (1) if you click on a li element, update the title to the inner HTML of that li and if you search an elemenet, make the title the 0th array element)
-//4) run the 5-day forecast API (use the moment library?)
-
 
 
