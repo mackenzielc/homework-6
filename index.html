@@ -33,30 +33,28 @@
 
             <!-- Empty card with list elements for past city searches -->
             <div class="card">
-                <ul class="list-group">
-                    
-                </ul>
+                <ul class="list-group"></ul>
             </div>
 
         </div>
 
-        <!-- Column that will contain current weather for current search -->
+        <!-- Column that will contain current and forecast weather -->
         <div class="col-md-9">
-            <div id="current" class="card"></div>
+            <!-- Current weather element -->
+            <div id="current"></div>
+
+            <!-- Forecast element-->
+            <div class="d-flex justify-content-around" id="forecast"></div>
         </div>
 
     </div>
-
-    <!-- Container that will contain 5-day forecast -->
-    <div class="row d-flex justify-content-around" id="forecast">
-        
-    </div>
-
-</body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-<script
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
     ></script>
-<script src="./Assets/script.js"></script>
+    <script src="./Assets/script.js"></script>
+
+</body>
 </html>

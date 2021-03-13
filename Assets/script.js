@@ -23,7 +23,7 @@ function renderCityHistory() {
         cityList.appendChild(li);   
     }
 
-    //Add click event to city history
+    //Add click event to city li elements in the history list
     cityList.addEventListener('click', function(event){     
         console.log(event)
         var element = event.target;
@@ -32,6 +32,7 @@ function renderCityHistory() {
         if(element.matches('li') === true) {
             console.log(element.innerHTML)
             var historyCity = element.innerHTML
+            //Run the API function with the city that was selected
             getAPI(historyCity)
         }
     })
@@ -43,7 +44,7 @@ function init() {
     //Get stored city names from localStorage
     var storedCities = JSON.parse(localStorage.getItem('cityHistory'))
 
-    //If cities were retrieved from localStorage, update the todos array 
+    //If cities were retrieved from localStorage, update the city history array 
     if(storedCities !== null) {
         cityHistory = storedCities
     }
@@ -51,10 +52,12 @@ function init() {
     renderCityHistory();
 }
 
+//Store the cities in local storage
 function storeCities() {
     localStorage.setItem('cityHistory', JSON.stringify(cityHistory));
 }
 
+//Add an evenet listener to the search form
 searchEl.addEventListener('submit', function(event){
     console.log(event)
     event.preventDefault();
@@ -66,20 +69,18 @@ searchEl.addEventListener('submit', function(event){
     cityHistory.push(city);
     searchedCity.value = "";
 
-    //Reverse the order of the array so it displays most recent searched at the top
-    // cityHistory.reverse();
-
-    //If there are already 5 cities show in the history, remove the first in the array and shift everything one spot
-    if(cityHistory.length > 5) {
+    //If there are already 10 cities, remove the first in the array and shift everything one spot
+    if(cityHistory.length > 10) {
         cityHistory.shift();
     }
 
-    //Story updated search in localStorage, re-render the list
+    //Store updated search in localStorage, re-render the list
     storeCities();
     renderCityHistory();
 
 });
 
+//Function to print the current weather
 function printCurrentWeather(name, resultObj) {
     var resultCard = document.createElement('div');
     resultCard.classList.add('card', 'bg-light', 'text-dark', 'm-3', 'p-3');
@@ -122,14 +123,15 @@ function printCurrentWeather(name, resultObj) {
     currentWeatherEl.append(resultCard);
 }
 
+//Function to print the forecast weather
 function printForecastWeather(resultObj) {
-    
+    //Run a for loop to create 5 cards
     for (var i = 1; i < 6; i++) {
         var resultCol = document.createElement('div');
         resultCol.classList.add('col-lg-2');
 
         var resultCard = document.createElement('div');
-        resultCard.classList.add('card', 'bg-light', 'text-dark', 'm-3', 'p-3');
+        resultCard.classList.add('card', 'bg-light', 'text-dark');
         resultCol.append(resultCard)
 
         var resultBody = document.createElement('div');
@@ -154,6 +156,7 @@ function printForecastWeather(resultObj) {
     }
 }
 
+//Function to call the open weather API and get the city name, lat and long
 function getAPI(cityID) {
     var key = 'dd6c6dc7ead19d604aeaf2d9ada1f731';
     fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityID+ '&units=metric&appid=' + key)
@@ -166,6 +169,7 @@ function getAPI(cityID) {
     .catch(function(){}) //catch any errors
 }
 
+//Function to call the open weather API
 function getWeatherAPI(name, lat, lon) {
     var key = 'dd6c6dc7ead19d604aeaf2d9ada1f731';
     fetch('http://api.openweathermap.org/data/2.5/onecall?lat='+ lat + '&lon=' + lon + '&units=metric&exclude=minutely,hourly,alerts&appid=' + key)
@@ -185,12 +189,5 @@ function getWeatherAPI(name, lat, lon) {
 //Call init to retrieve data and render it to the page on load
 init();
 
-
-
-
-//Things to do
-//1) Add the list so it is in reverse order
-//2) Change the hover over pointer to just the text, not the entire link element
-//3) Add the city to the title element (2 steps - (1) if you click on a li element, update the title to the inner HTML of that li and if you search an elemenet, make the title the 0th array element)
 
 

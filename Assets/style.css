@@ -22,31 +22,29 @@ main {
     border-radius: .3rem;
     border: none;
     outline: none;
-    box-shadow: 3px 3px blue;
 }
 
 .btn:hover {
-    background-color: rgb(68, 68, 236);
-    box-shadow: 2px 2px #040d83;
+    background-color: blue;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 255, 0.212);
 }
 
 .hero {
     padding: 3% 4%;
-    background-color: rgb(68, 68, 236);
+    background-color: blue;
     color: #fff;
 }
 
 .app-title {
     font-size: 3rem;
-    background-color:rgb(68, 68, 236);
+    background-color:blue;
     padding: 0 10px;
     display: inline-block;
 }
 
 ul {
     list-style-type: none;
-    margin-left: 3px;
-    line-height: 2;
+    line-height: 3;
 }
 
 li:first-letter {
@@ -55,6 +53,14 @@ li:first-letter {
 
 .custom-li:hover {
     cursor:pointer;
+}
+
+.custom-li {
+    padding-left: 8px;
+    border: solid;
+    border-width: 0.5px;
+    border-color: rgba(142, 142, 146, 0.452);
+    color: rgba(147, 147, 151);
 }
 
 .green-uv {
