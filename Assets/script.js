@@ -172,7 +172,7 @@ function getAPI(cityID) {
 //Function to call the open weather API
 function getWeatherAPI(name, lat, lon) {
     var key = 'dd6c6dc7ead19d604aeaf2d9ada1f731';
-    fetch('http://api.openweathermap.org/data/2.5/onecall?lat='+ lat + '&lon=' + lon + '&units=metric&exclude=minutely,hourly,alerts&appid=' + key)
+    fetch('https://api.openweathermap.org/data/2.5/onecall?lat='+ lat + '&lon=' + lon + '&units=metric&exclude=minutely,hourly,alerts&appid=' + key)
     .then(function(response){return response.json()})
     .then(function(data){
         console.log(data)
